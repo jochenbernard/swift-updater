@@ -3,6 +3,12 @@ public struct SUVersion: Comparable {
     public let minor: Int
     public let patch: Int
 
+    public var string: String {
+        versions
+            .map(\.description)
+            .joined(separator: ".")
+    }
+
     private var versions: [Int] {
         [major, minor, patch]
     }
