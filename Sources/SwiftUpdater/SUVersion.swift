@@ -1,4 +1,4 @@
-public struct SUVersion: Comparable {
+public struct SUVersion: Comparable, Sendable {
     public let major: Int
     public let minor: Int
     public let patch: Int
