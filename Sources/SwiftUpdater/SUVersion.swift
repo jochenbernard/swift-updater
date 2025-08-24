@@ -1,8 +1,15 @@
+/// A semantic version.
 public struct SUVersion: Comparable, Sendable {
+    /// The major version.
     public let major: Int
+
+    /// The minor version.
     public let minor: Int
+
+    /// The patch version.
     public let patch: Int
 
+    /// The semantic version string.
     public var string: String {
         versions
             .map(\.description)
@@ -13,6 +20,12 @@ public struct SUVersion: Comparable, Sendable {
         [major, minor, patch]
     }
 
+    /// Initializes a semantic version.
+    ///
+    /// - Paramters:
+    ///   - major: The major version.
+    ///   - minor: The minor version.
+    ///   - patch: The patch version.
     public init(
         major: Int,
         minor: Int,
@@ -23,6 +36,9 @@ public struct SUVersion: Comparable, Sendable {
         self.patch = patch
     }
 
+    /// Initializes a semantic version from a string.
+    ///
+    /// - Parameter string: The semantic version string.
     public init?(string: String) {
         let versionStrings = string.split(
             separator: ".",
