@@ -77,17 +77,4 @@ public struct SUVersion: Comparable, Sendable {
 
         return false
     }
-
-    /// The semantic version of the bundle that contains the current executable.
-    ///
-    /// This version is derived from the `CFBundleShortVersionString` in the bundle's `Info.plist`. This value is `nil`
-    /// if the bundle does not contain an `Info.plist` or the `CFBundleShortVersionString` does not contain a valid
-    /// semantic version.
-    public static var current: Self? {
-        guard let string = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
-            return nil
-        }
-
-        return Self(string: string)
-    }
 }

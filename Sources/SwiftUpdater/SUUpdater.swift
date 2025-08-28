@@ -1,14 +1,21 @@
 import AppKit
 
-/// A collection of functions to update the app bundle.
-public struct SUUpdater {
-    private init() {}
+/// An object that manages updates for a certain bundle.
+public final class SUUpdater: Sendable {
+    public let bundle: Bundle
 
-    /// Installs an update from a local app bundle.
+    /// Creates an updater for the specified bundle.
     ///
-    /// - Parameter updateURL: The URL of the local app bundle.
-    public static func installUpdate(from updateURL: URL) throws {
-        let bundleURL = Bundle.main.bundleURL
+    /// - Parameter bundle: The bundle.
+    public init(bundle: Bundle = .main) {
+        self.bundle = bundle
+    }
+
+    /// Installs an update from a local bundle.
+    ///
+    /// - Parameter updateURL: The URL of the local bundle.
+    public func installUpdate(from updateURL: URL) throws {
+        let bundleURL = bundle.bundleURL
         try FileManager.default.removeItem(at: bundleURL)
         try FileManager.default.moveItem(
             at: updateURL,
@@ -16,14 +23,34 @@ public struct SUUpdater {
         )
     }
 
-    /// Relaunches the app.
-    @MainActor
-    public static func relaunch() {
-        let bundleURL = Bundle.main.bundleURL
+    /// Launches the bundle.
+    public func launch() {
         NSWorkspace.shared.openApplication(
-            at: bundleURL,
+            at: bundle.bundleURL,
             configuration: NSWorkspace.OpenConfiguration()
         )
+    }
+
+    /// Relaunches the bundle.
+    ///
+    /// This function will throw ``Error/cannotRelaunchBundle`` if the updater does not manage the bundle that contains
+    /// the current executable.
+    @MainActor
+    public func relaunch() throws(Error) {
+        guard bundle == .main else {
+            throw Error.cannotRelaunchBundle
+        }
+
+        launch()
         NSApplication.shared.terminate(self)
+    }
+
+    /// An error thrown by an ``SUUpdater``.
+    public enum Error: Swift.Error {
+        /// The updater cannot relaunch the bundle.
+        ///
+        /// This error is thrown whenever ``SUUpdater/relaunch()`` is called on an ``SUUpdater`` which does not manage
+        /// the bundle that contains the current executable.
+        case cannotRelaunchBundle
     }
 }
