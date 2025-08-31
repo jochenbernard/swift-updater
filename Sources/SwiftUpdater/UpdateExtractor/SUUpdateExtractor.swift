@@ -1,7 +1,7 @@
 import Foundation
 
 /// An object which extracts updates.
-public protocol SUUpdateExtractor {
+public protocol SUUpdateExtractor: Sendable {
     /// Extracts an update from a local file URL.
     ///
     /// - Parameter url: The local file URL.
