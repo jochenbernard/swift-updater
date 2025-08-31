@@ -1,5 +1,3 @@
-import Foundation
-
 /// An object which matches files by their name.
 public struct SUFileNameMatcher: SUFileMatcher {
     /// The file name required to match.
@@ -17,7 +15,9 @@ public struct SUFileNameMatcher: SUFileMatcher {
     /// - Parameter file: The file.
     /// - Returns: `true` if the file's name matches, `false` if it does not.
     public func matches(_ file: String) -> Bool {
-        file == fileName
+        let lastDotIndex = file.lastIndex(of: ".") ?? file.endIndex
+        let fileName = file.prefix(upTo: lastDotIndex)
+        return fileName == self.fileName
     }
 }
 

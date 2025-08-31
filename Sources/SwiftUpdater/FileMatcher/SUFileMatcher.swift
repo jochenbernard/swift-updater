@@ -1,5 +1,3 @@
-import Foundation
-
 /// An object which matches files.
 public protocol SUFileMatcher {
     /// Returns a boolean value that indicates whether a file matches.

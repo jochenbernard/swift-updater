@@ -1,5 +1,3 @@
-import Foundation
-
 /// An object which matches files by their extension.
 public struct SUFileExtensionMatcher: SUFileMatcher {
     /// The file extension required to match.
