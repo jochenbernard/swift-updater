@@ -14,7 +14,7 @@ public final class SUUpdater: Sendable {
     /// Installs an update from a local bundle.
     ///
     /// - Parameter updateURL: The URL of the local bundle.
-    public func installUpdate(from updateURL: URL) throws {
+    public func install(from updateURL: URL) throws {
         let bundleURL = bundle.bundleURL
         try FileManager.default.removeItem(at: bundleURL)
         try FileManager.default.moveItem(

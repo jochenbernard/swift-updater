@@ -14,9 +14,14 @@ public struct SUUpdateZIPExtractor: SUUpdateExtractor {
 
     /// Extracts an update from a local ZIP archive.
     ///
-    /// - Parameter url: The local ZIP archive.
+    /// - Parameters:
+    ///   - url: The local ZIP archive.
+    ///   - onProgress: A closure to run when the progress changes.
     /// - Returns: The local file URL of the extracted update.
-    public func extract(from url: URL) throws -> URL {
+    public func extract(
+        from url: URL,
+        onProgress: (_ progress: Double?) -> Void // swiftlint:disable:this unused_parameter
+    ) throws -> URL {
         let destinationURL = url.deletingPathExtension()
 
         let process = Process()
