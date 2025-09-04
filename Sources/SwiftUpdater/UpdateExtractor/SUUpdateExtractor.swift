@@ -10,6 +10,6 @@ public protocol SUUpdateExtractor: Sendable {
     /// - Returns: The local file URL of the extracted update.
     func extract(
         from url: URL,
-        onProgress: (_ progress: Double?) -> Void
+        onProgress: (_ progress: SUProgress?) -> Void
     ) async throws -> URL
 }

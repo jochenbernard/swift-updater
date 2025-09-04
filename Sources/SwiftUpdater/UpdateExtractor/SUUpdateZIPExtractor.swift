@@ -20,7 +20,7 @@ public struct SUUpdateZIPExtractor: SUUpdateExtractor {
     /// - Returns: The local file URL of the extracted update.
     public func extract(
         from url: URL,
-        onProgress: (_ progress: Double?) -> Void // swiftlint:disable:this unused_parameter
+        onProgress: (_ progress: SUProgress?) -> Void // swiftlint:disable:this unused_parameter
     ) throws -> URL {
         let destinationURL = url.deletingPathExtension()
 
