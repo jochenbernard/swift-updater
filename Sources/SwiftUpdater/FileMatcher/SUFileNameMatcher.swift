@@ -1,9 +1,9 @@
-/// An object which matches files by their name.
+/// An object that matches files by their name.
 public struct SUFileNameMatcher: SUFileMatcher {
     /// The file name required to match.
     public let fileName: String
 
-    /// Creates a matcher which matches files by their name.
+    /// Creates a matcher that matches files by their name.
     ///
     /// - Parameter fileName: The file name required to match.
     public init(_ fileName: String) {
@@ -22,7 +22,7 @@ public struct SUFileNameMatcher: SUFileMatcher {
 }
 
 public extension SUFileMatcher where Self == SUFileNameMatcher {
-    /// Creates a matcher which matches files by their name.
+    /// Creates a matcher that matches files by their name.
     ///
     /// - Parameter fileName: The file name required to match.
     static func fileName(_ fileName: String) -> SUFileNameMatcher {

@@ -1,6 +1,6 @@
 // swiftlint:disable sorted_enum_cases
 
-/// A type which represents progress.
+/// A type that represents progress.
 public enum SUProgress {
     /// Progress represented by a fraction.
     ///

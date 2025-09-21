@@ -1,26 +1,26 @@
 import Foundation
 
-/// An object which downloads updates.
+/// An object that downloads updates.
 public struct SUUpdateStandardDownloader: SUUpdateDownloader {
     /// The `URLSession` for the download.
     public let urlSession: URLSession
 
-    /// Creates a standard downloader which downloads updates.
+    /// Creates a downloader that downloads updates using the specified `URLSession`.
     ///
-    /// - Parameter urlSession: The `URLSession` for the download.
+    /// - Parameter urlSession: The `URLSession` for the download. The default is `shared`.
     public init(urlSession: URLSession = .shared) {
         self.urlSession = urlSession
     }
 
-    /// Downloads an update from a URL.
+    /// Downloads an update from the specified remote URL.
     ///
     /// - Parameters:
-    ///   - url: The URL.
+    ///   - url: The remote URL.
     ///   - onProgress: A closure to run when the progress changes.
     /// - Returns: The local file URL of the downloaded update.
     public func download(
         from url: URL,
-        onProgress: @escaping @Sendable (SUProgress?) -> Void
+        onProgress: @escaping @MainActor (SUProgress?) -> Void
     ) async throws -> URL {
         let download = Download(
             url: url,
@@ -33,9 +33,9 @@ public struct SUUpdateStandardDownloader: SUUpdateDownloader {
 }
 
 public extension SUUpdateDownloader where Self == SUUpdateStandardDownloader {
-    /// Creates a standard downloader which downloads updates.
+    /// Creates a downloader that downloads updates using the specified `URLSession`.
     ///
-    /// - Parameter urlSession: The `URLSession` for the download.
+    /// - Parameter urlSession: The `URLSession` for the download. The default is `shared`.
     static func standard(urlSession: URLSession = .shared) -> SUUpdateStandardDownloader {
         SUUpdateStandardDownloader(urlSession: urlSession)
     }
@@ -44,14 +44,14 @@ public extension SUUpdateDownloader where Self == SUUpdateStandardDownloader {
 private final class Download: NSObject, URLSessionDownloadDelegate {
     private let url: URL
     private let urlSession: URLSession
-    private let onProgress: @Sendable (SUProgress?) -> Void
+    private let onProgress: @MainActor (SUProgress?) -> Void
 
     @MainActor private var continuation: CheckedContinuation<URL, Swift.Error>?
 
     init(
         url: URL,
         urlSession: URLSession,
-        onProgress: @Sendable @escaping (SUProgress?) -> Void
+        onProgress: @escaping @MainActor (SUProgress?) -> Void
     ) {
         self.url = url
         self.urlSession = urlSession
@@ -82,12 +82,14 @@ private final class Download: NSObject, URLSessionDownloadDelegate {
         totalBytesWritten: Int64,
         totalBytesExpectedToWrite: Int64
     ) {
-        onProgress(
-            .bytes(
-                completed: totalBytesWritten,
-                total: totalBytesExpectedToWrite
+        Task { @MainActor in
+            onProgress(
+                .bytes(
+                    completed: totalBytesWritten,
+                    total: totalBytesExpectedToWrite
+                )
             )
-        )
+        }
     }
 
     func urlSession(

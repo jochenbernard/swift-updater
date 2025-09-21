@@ -1,8 +1,8 @@
 import Foundation
 
-/// An object which extracts updates.
+/// An object that extracts updates.
 public protocol SUUpdateExtractor: Sendable {
-    /// Extracts an update from a local file URL.
+    /// Extracts an update from the specified local file URL.
     ///
     /// - Parameters:
     ///   - url: The local file URL.
@@ -10,6 +10,6 @@ public protocol SUUpdateExtractor: Sendable {
     /// - Returns: The local file URL of the extracted update.
     func extract(
         from url: URL,
-        onProgress: @escaping @Sendable (_ progress: SUProgress?) -> Void
+        onProgress: @escaping @Sendable @MainActor (_ progress: SUProgress?) -> Void
     ) async throws -> URL
 }

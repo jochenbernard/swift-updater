@@ -1,18 +1,18 @@
 import Foundation
 
-/// An object which extracts updates from a ZIP archive.
+/// An object that extracts updates from a ZIP archive.
 public struct SUUpdateZIPExtractor: SUUpdateExtractor {
     /// The file matcher to determine which file in the archive should be extracted.
     public let fileMatcher: SUFileMatcher
 
-    /// Creates an extractor which extracts updates from a ZIP archive.
+    /// Creates an extractor that extracts updates from a ZIP archive.
     ///
     /// - Parameter fileMatcher: The file matcher to determine which file in the archive should be extracted.
     public init(fileMatcher: SUFileMatcher) {
         self.fileMatcher = fileMatcher
     }
 
-    /// Extracts an update from a local ZIP archive.
+    /// Extracts an update from the specified local ZIP archive.
     ///
     /// - Parameters:
     ///   - url: The local ZIP archive.
@@ -20,7 +20,7 @@ public struct SUUpdateZIPExtractor: SUUpdateExtractor {
     /// - Returns: The local file URL of the extracted update.
     public func extract(
         from url: URL,
-        onProgress: (_ progress: SUProgress?) -> Void // swiftlint:disable:this unused_parameter
+        onProgress: @MainActor (_ progress: SUProgress?) -> Void // swiftlint:disable:this unused_parameter
     ) throws -> URL {
         let destinationURL = url.deletingPathExtension()
 
@@ -75,7 +75,7 @@ public struct SUUpdateZIPExtractor: SUUpdateExtractor {
 }
 
 public extension SUUpdateExtractor where Self == SUUpdateZIPExtractor {
-    /// Creates an extractor which extracts updates from a ZIP archive.
+    /// Creates an extractor that extracts updates from a ZIP archive.
     ///
     /// - Parameter fileMatcher: The file matcher to determine which file in the archive should be extracted.
     static func zip(fileMatcher: SUFileMatcher) -> SUUpdateZIPExtractor {

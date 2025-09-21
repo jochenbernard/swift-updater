@@ -1,4 +1,4 @@
-/// An object which matches files.
+/// An object that matches files.
 public protocol SUFileMatcher: Sendable {
     /// Returns a boolean value that indicates whether a file matches.
     ///

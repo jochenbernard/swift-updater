@@ -1,56 +1,39 @@
-import AppKit
+import Foundation
 
-/// An object that manages updates for a certain bundle.
+/// An object that manages updates.
 public final class SUUpdater: Sendable {
     public let bundle: Bundle
+    public let downloader: SUUpdateDownloader
+    public let extractor: SUUpdateExtractor?
 
-    /// Creates an updater for the specified bundle.
+    /// Creates an updater for the specified bundle using the specified downloader and extractor.
     ///
-    /// - Parameter bundle: The bundle.
-    public init(bundle: Bundle = .main) {
+    /// - Parameters:
+    ///   - bundle: The bundle. The default is `main`.
+    ///   - downloader: The downloader. The default is ``SUUpdateDownloader/standard(urlSession:)``.
+    ///   - extractor: The extractor. The default is `nil`.
+    public init(
+        bundle: Bundle = .main,
+        downloader: SUUpdateDownloader = .standard(),
+        extractor: SUUpdateExtractor? = nil
+    ) {
         self.bundle = bundle
+        self.downloader = downloader
+        self.extractor = extractor
     }
 
-    /// Installs an update from a local bundle.
+    /// Creates an update from the specified remote url.
     ///
-    /// - Parameter updateURL: The URL of the local bundle.
-    public func install(from updateURL: URL) throws {
-        let bundleURL = bundle.bundleURL
-        try FileManager.default.removeItem(at: bundleURL)
-        try FileManager.default.moveItem(
-            at: updateURL,
-            to: bundleURL
-        )
-    }
-
-    /// Launches the bundle.
-    public func launch() {
-        NSWorkspace.shared.openApplication(
-            at: bundle.bundleURL,
-            configuration: NSWorkspace.OpenConfiguration()
-        )
-    }
-
-    /// Relaunches the bundle.
+    /// - Parameter updateURL: The remote URL.
     ///
-    /// This function will throw ``Error/cannotRelaunchBundle`` if the updater does not manage the bundle that contains
-    /// the current executable.
+    /// This update still has to be started using the ``SUUpdate/start()`` method.
     @MainActor
-    public func relaunch() throws(Error) {
-        guard bundle == .main else {
-            throw Error.cannotRelaunchBundle
-        }
-
-        launch()
-        NSApplication.shared.terminate(self)
-    }
-
-    /// An error thrown by an ``SUUpdater``.
-    public enum Error: Swift.Error {
-        /// The updater cannot relaunch the bundle.
-        ///
-        /// This error is thrown whenever ``SUUpdater/relaunch()`` is called on an ``SUUpdater`` which does not manage
-        /// the bundle that contains the current executable.
-        case cannotRelaunchBundle
+    public func update(from updateURL: URL) -> SUUpdate {
+        SUUpdate(
+            url: updateURL,
+            bundle: bundle,
+            downloader: downloader,
+            extractor: extractor
+        )
     }
 }

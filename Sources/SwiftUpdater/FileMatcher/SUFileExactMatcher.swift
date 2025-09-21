@@ -1,9 +1,9 @@
-/// An object which matches files by their name and extension.
+/// An object that matches files by their name and extension.
 public struct SUFileExactMatcher: SUFileMatcher {
     /// The file name and extension required to match.
     public let file: String
 
-    /// Creates a matcher which matches files by their name and extension.
+    /// Creates a matcher that matches files by their name and extension.
     ///
     /// - Parameter file: The file name and extension required to match.
     public init(_ file: String) {
@@ -20,7 +20,7 @@ public struct SUFileExactMatcher: SUFileMatcher {
 }
 
 public extension SUFileMatcher where Self == SUFileExactMatcher {
-    /// Creates a matcher which matches files by their name and extension.
+    /// Creates a matcher that matches files by their name and extension.
     ///
     /// - Parameter file: The file name and extension required to match.
     static func exact(_ file: String) -> SUFileExactMatcher {
