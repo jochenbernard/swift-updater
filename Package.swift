@@ -9,6 +9,10 @@ let package = Package(
         .library(
             name: "SwiftUpdater",
             targets: ["SwiftUpdater"]
+        ),
+        .library(
+            name: "SwiftUpdaterUI",
+            targets: ["SwiftUpdaterUI"]
         )
     ],
     dependencies: [
@@ -20,6 +24,16 @@ let package = Package(
     targets: [
         .target(
             name: "SwiftUpdater",
+            plugins: [
+                .plugin(
+                    name: "SwiftLintBuildToolPlugin",
+                    package: "SwiftLintPlugins"
+                )
+            ]
+        ),
+        .target(
+            name: "SwiftUpdaterUI",
+            dependencies: ["SwiftUpdater"],
             plugins: [
                 .plugin(
                     name: "SwiftLintBuildToolPlugin",
