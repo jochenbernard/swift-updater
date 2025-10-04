@@ -1,7 +1,7 @@
 // swiftlint:disable sorted_enum_cases
 
 /// A type that represents progress.
-public enum SUProgress {
+public enum SUProgress: Sendable {
     /// Progress represented by a fraction.
     ///
     /// - Parameter fraction: The fraction.
@@ -21,7 +21,11 @@ public enum SUProgress {
             fraction
 
         case let .bytes(completed, total):
-            Double(completed) / Double(total)
+            if total == .zero {
+                .zero
+            } else {
+                Double(completed) / Double(total)
+            }
         }
     }
 }
